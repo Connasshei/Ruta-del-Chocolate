@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class EventoParada extends Model
+class EventoParada extends Pivot
 {
+    public $incrementing = true;
+
     public const ESTADO_PENDIENTE = 'pendiente';
     public const ESTADO_EN_CURSO = 'en_curso';
     public const ESTADO_COMPLETADA = 'completada';

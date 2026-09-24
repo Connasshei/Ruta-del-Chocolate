@@ -11,6 +11,8 @@ class Actividad extends Model
 {
     use HasFactory;
 
+    protected $table = 'actividades';
+
     public const TIPO_TRIVIA = 'trivia';
     public const TIPO_QUIZ_FOTO = 'quiz_foto';
     public const TIPO_ENCUENTRA_DIFERENCIA = 'encuentra_diferencia';

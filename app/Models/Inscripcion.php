@@ -10,6 +10,8 @@ class Inscripcion extends Model
 {
     use HasFactory;
 
+    protected $table = 'inscripciones';
+
     public const ESTADO_PENDIENTE = 'pendiente';
     public const ESTADO_CONFIRMADO = 'confirmado';
     public const ESTADO_CANCELADO = 'cancelado';

@@ -10,6 +10,8 @@ class Participacion extends Model
 {
     use HasFactory;
 
+    protected $table = 'participaciones';
+
     protected $fillable = ['evento_id', 'actividad_id', 'user_id', 'puntaje', 'intentos', 'completado_en'];
 
     protected function casts(): array
