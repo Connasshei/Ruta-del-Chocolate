@@ -1,0 +1,16 @@
+Necesito que me ayudes a obtener los requerimientos funcionales y no funcionales para un proyecto que quiere promocionar "la ruta del chocolate" de la ciudad de Sucre Bolivia, es más que todo para promocionar y no para algo administrativo, estaba pensando cómo sería esta promoción y pensé las siguientes vistas:
+Módulos Turistas:
+Vista principal (Tour, Info del tour, fotos bomnitas)
+Login
+un menu donde se muestre el guia ,la hora de tour y a donde se ira durante ese recorrido
+Formulario de registro al evento (tour) - se necesita haber loggeado
+Minijuego masomenos
+Ir pensando actividades interactivas, tal vez unas 2 o 3 por lugar turístico, con estas fotos realizar un recuerdo al final del evento y también guardar la info para promocionar futuros tours
+Módulos Guía turista / agencia de turistas:
+Login
+Vista Principal
+Modificación de ruta/actualización de eventos
+Creación del Evento
+Vista Mientras están en el evento 
+- Ranking de personas que llenan las actividades
+- Terminar el evento

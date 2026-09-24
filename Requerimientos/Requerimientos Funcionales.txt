@@ -1,0 +1,158 @@
+
+ID 
+
+Requerimiento funcional 
+
+Descripción 
+
+RF-01 
+
+ 
+
+El sistema debe mostrar una vista principal pública con información general del tour “La Ruta del Chocolate” 
+
+RF-02 
+
+ 
+
+El sistema debe permitir el registro y login de usuarios turistas. 
+
+RF-03 
+
+ 
+
+El sistema debe mostrar un itinerario del recorrido con: horario, ubicación, destino de cada tramo del tour 
+
+RF-04 
+
+ 
+
+El sistema debe permitir al turista inscribirse a un evento específico mediante formulario 
+
+RF-05 
+
+ 
+
+El sistema debe presentar actividades interactivas asociadas a cada lugar turístico 
+
+RF-06 
+
+ 
+
+El sistema debe permitir capturar/subir fotos del turista durante cada actividad 
+
+RF-07 
+
+ 
+
+El sistema debe generar automáticamente un “recuerdo” cuando el evento finaliza, utilizando fotos y logros obtenidos durante el recorrido 
+
+RF-08 
+
+ 
+
+El sistema debe permitir login diferenciado para guías/agencias con permisos distintos a turistas 
+
+RF-09 
+
+ 
+
+El sistema debe mostrar una vista principal con el resumen de eventos activos, próximos y finalizados 
+
+RF-10 
+
+ 
+
+El sistema debe permitir crear un nuevo evento 
+
+RF-11 
+
+ 
+
+El sistema debe permitir modificar la ruta o actualizar los datos de un evento ya creado 
+
+RF-12 
+
+ 
+
+El sistema debe permitir al guía marcar el evento como finalizado, cerrando el registro de actividades y disparando la generación de recuerdos para los turistas 
+
+
+ID 
+
+Requerimiento funcional 
+
+Descripción 
+
+RF-01 
+
+ 
+
+El sistema debe mostrar una vista principal pública con información general del tour “La Ruta del Chocolate” 
+
+RF-02 
+
+ 
+
+El sistema debe permitir el registro y login de usuarios turistas. 
+
+RF-03 
+
+ 
+
+El sistema debe mostrar un itinerario del recorrido con: horario, ubicación, destino de cada tramo del tour 
+
+RF-04 
+
+ 
+
+El sistema debe permitir al turista inscribirse a un evento específico mediante formulario 
+
+RF-05 
+
+ 
+
+El sistema debe presentar actividades interactivas asociadas a cada lugar turístico 
+
+RF-06 
+
+ 
+
+El sistema debe permitir capturar/subir fotos del turista durante cada actividad 
+
+RF-07 
+
+ 
+
+El sistema debe generar automáticamente un “recuerdo” cuando el evento finaliza, utilizando fotos y logros obtenidos durante el recorrido 
+
+RF-08 
+
+ 
+
+El sistema debe permitir login diferenciado para guías/agencias con permisos distintos a turistas 
+
+RF-09 
+
+ 
+
+El sistema debe mostrar una vista principal con el resumen de eventos activos, próximos y finalizados 
+
+RF-10 
+
+ 
+
+El sistema debe permitir crear un nuevo evento 
+
+RF-11 
+
+ 
+
+El sistema debe permitir modificar la ruta o actualizar los datos de un evento ya creado 
+
+RF-12 
+
+ 
+
+El sistema debe permitir al guía marcar el evento como finalizado, cerrando el registro de actividades y disparando la generación de recuerdos para los turistas 
+
