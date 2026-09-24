@@ -9,6 +9,8 @@ class EventoParada extends Pivot
 {
     public $incrementing = true;
 
+    public $timestamps = true;
+
     public const ESTADO_PENDIENTE = 'pendiente';
     public const ESTADO_EN_CURSO = 'en_curso';
     public const ESTADO_COMPLETADA = 'completada';
