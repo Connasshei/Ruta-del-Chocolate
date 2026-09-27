@@ -1,118 +1,226 @@
 @extends('layouts.app')
 
-@section('title', 'Mi Resumen de Actividades')
+@section('title', 'Mi Resumen')
 
 @section('content')
-    <div class="resumen-container">
-        <a href="{{ route('eventos.show', $evento) }}" class="btn btn-sec">← Volver</a>
+    <div class="page-header">
+        <a href="{{ route('eventos.show', $evento) }}" style="color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+            ← Volver al evento
+        </a>
+        <h1>🏆 Mi Resumen de Actividades</h1>
+        <p class="page-description">{{ $evento->tour->nombre }}</p>
+    </div>
 
-        <h1>🎮 Mi Resumen de Actividades</h1>
-
-        <div class="resumen-header">
-            <div class="puntaje-card">
-                <div class="puntaje-numero">{{ $puntajeTotal }}</div>
-                <div class="puntaje-label">Puntos Total</div>
-            </div>
-            <div class="posicion-card">
-                <div class="posicion-numero">{{ $posicion }} de {{ $totalTuristas }}</div>
-                <div class="posicion-label">Tu Posición</div>
-            </div>
-        </div>
-
-        <div class="actividades-completadas">
-            <h2>Actividades Completadas</h2>
-
-            @forelse ($participaciones as $participacion)
-                <div class="participacion-item">
-                    <div class="participacion-info">
-                        <h3>{{ $participacion->actividad->nombre }}</h3>
-                        <p class="parada-nombre">{{ $participacion->actividad->parada->nombre }}</p>
-                        <p class="fecha-participacion">{{ $participacion->completado_en->format('d/m/Y H:i') }}</p>
-                    </div>
-                    <div class="participacion-puntaje">
-                        <span class="puntaje-badge">{{ $participacion->puntaje }} / {{ $participacion->actividad->puntos_max }}</span>
-                    </div>
+    <!-- Cards de estadísticas -->
+    <div class="grid-3">
+        <div class="card stats-card">
+            <div class="stats-content">
+                <div class="stats-icon">⭐</div>
+                <div class="stats-text">
+                    <div class="stats-value">{{ $puntajeTotal }}</div>
+                    <div class="stats-label">Puntos Total</div>
                 </div>
-            @empty
-                <p class="muted">Aún no has completado ninguna actividad.</p>
-            @endforelse
+            </div>
         </div>
 
-        <div class="acciones">
-            <a href="{{ route('actividades.mostrar', $evento) }}" class="btn btn-primary">Ver más actividades</a>
-            <a href="{{ route('fotos.galeria', $evento) }}" class="btn btn-secondary">Ver fotos</a>
+        <div class="card stats-card">
+            <div class="stats-content">
+                <div class="stats-icon">🎮</div>
+                <div class="stats-text">
+                    <div class="stats-value">{{ $participaciones->count() }}</div>
+                    <div class="stats-label">Actividades Completadas</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card stats-card">
+            <div class="stats-content">
+                <div class="stats-icon">🥇</div>
+                <div class="stats-text">
+                    <div class="stats-value">#{{ $posicion }}</div>
+                    <div class="stats-label">Tu Posición (de {{ $totalTuristas }})</div>
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- Actividades completadas -->
+    <div class="card" style="margin-top: 2rem;">
+        <div class="card-header">
+            <h2>Actividades Completadas</h2>
+        </div>
+
+        @if ($participaciones->count() > 0)
+            <div class="participaciones-list">
+                @foreach ($participaciones as $participacion)
+                    <div class="participacion-item">
+                        <div class="participacion-main">
+                            <div class="participacion-header">
+                                <h3 class="participacion-title">
+                                    @if ($participacion->actividad->tipo === 'trivia')
+                                        📝
+                                    @elseif ($participacion->actividad->tipo === 'quiz_foto')
+                                        📸
+                                    @else
+                                        🎮
+                                    @endif
+                                    {{ $participacion->actividad->nombre }}
+                                </h3>
+                                <span class="participacion-badge">{{ $participacion->puntaje }} / {{ $participacion->actividad->puntos_max }} pts</span>
+                            </div>
+                            <div class="participacion-details">
+                                <span class="detail">📍 {{ $participacion->actividad->parada->nombre }}</span>
+                                <span class="detail">📅 {{ $participacion->completado_en->format('d/m/Y H:i') }}</span>
+                            </div>
+                        </div>
+                        <div class="participacion-score">
+                            <div class="score-percent">{{ ceil(($participacion->puntaje / $participacion->actividad->puntos_max) * 100) }}%</div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <div class="empty-state">
+                <div class="empty-icon">🎮</div>
+                <h3>Aún no has completado actividades</h3>
+                <p>Completa actividades del tour para ganar puntos y aparecer en el ranking.</p>
+            </div>
+        @endif
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="btn-group" style="margin-top: 2rem;">
+        <a href="{{ route('fotos.galeria', $evento) }}" class="btn btn-secondary">📸 Ver fotos</a>
+        <a href="{{ route('recuerdos.mio', $evento) }}" class="btn btn-secondary">🎁 Mi recuerdo</a>
+        <a href="{{ route('eventos.show', $evento) }}" class="btn">Volver</a>
+    </div>
+
     <style>
-        .resumen-container { max-width: 800px; margin: 2rem auto; }
-        .resumen-header {
-            display: grid;
+        .grid-3 {
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
         }
-        .puntaje-card, .posicion-card {
-            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
-            color: white;
-            padding: 2rem;
-            border-radius: 8px;
+
+        .stats-card {
+            padding: 1.5rem;
             text-align: center;
         }
-        .puntaje-numero, .posicion-numero {
+
+        .stats-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stats-icon {
             font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
         }
-        .puntaje-label, .posicion-label {
-            font-size: 1rem;
-            opacity: 0.9;
+
+        .stats-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
         }
-        .actividades-completadas { margin: 2rem 0; }
-        .actividades-completadas h2 {
-            color: #8B4513;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #8B4513;
-            padding-bottom: 0.5rem;
+
+        .stats-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
         }
+
+        .participaciones-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
         .participacion-item {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 1.5rem;
+            background: var(--bg);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
         }
-        .participacion-info h3 {
-            margin: 0 0 0.5rem;
-            color: #333;
+
+        .participacion-item:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.1);
         }
-        .parada-nombre {
-            color: #666;
-            font-size: 0.9rem;
-            margin: 0.25rem 0;
+
+        .participacion-main {
+            flex: 1;
         }
-        .fecha-participacion {
-            color: #999;
-            font-size: 0.85rem;
-            margin: 0.5rem 0 0;
-        }
-        .participacion-puntaje { text-align: right; }
-        .puntaje-badge {
-            background: #8B4513;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-weight: bold;
-            display: inline-block;
-        }
-        .acciones {
+
+        .participacion-header {
             display: flex;
+            justify-content: space-between;
+            align-items: center;
             gap: 1rem;
-            margin-top: 2rem;
+            margin-bottom: 0.75rem;
         }
-        .btn { padding: 0.75rem 1.5rem; }
+
+        .participacion-title {
+            margin: 0;
+            font-size: 1.05rem;
+            color: var(--text);
+        }
+
+        .participacion-badge {
+            background: var(--primary);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+
+        .participacion-details {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .detail {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .participacion-score {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(160, 82, 45, 0.1) 100%);
+            border: 2px solid var(--primary);
+            margin-left: 1rem;
+        }
+
+        .score-percent {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .participacion-item {
+                flex-direction: column;
+            }
+
+            .participacion-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .participacion-score {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+        }
     </style>
 @endsection

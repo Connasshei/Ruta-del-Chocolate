@@ -3,37 +3,56 @@
 @section('title', 'Ranking en Vivo')
 
 @section('content')
-    <div class="ranking-container">
-        <a href="{{ route('guias.eventos.show', $evento) }}" class="btn btn-sec">← Volver</a>
-
+    <div class="page-header">
+        <a href="{{ route('guias.eventos.show', $evento) }}" style="color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+            ← Volver al evento
+        </a>
         <h1>📊 Ranking en Vivo</h1>
-        <p class="subtitle">{{ $evento->tour->nombre }} - {{ $evento->fecha->format('d/m/Y') }}</p>
+        <p class="page-description">{{ $evento->tour->nombre }} • {{ $evento->fecha->format('d/m/Y H:i') }}</p>
+    </div>
 
-        <div class="ranking-stats">
-            <div class="stat-card">
-                <div class="stat-number">{{ $ranking->count() }}</div>
-                <div class="stat-label">Turistas participando</div>
+    <div class="grid">
+        <div class="card">
+            <div class="stat-item">
+                <div class="stat-icon">👥</div>
+                <div class="stat-info">
+                    <div class="stat-value">{{ $ranking->count() }}</div>
+                    <div class="stat-label">Participantes</div>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-number">{{ $participacionesTotales }}</div>
-                <div class="stat-label">Actividades completadas</div>
+        </div>
+        <div class="card">
+            <div class="stat-item">
+                <div class="stat-icon">🎮</div>
+                <div class="stat-info">
+                    <div class="stat-value">{{ $participacionesTotales }}</div>
+                    <div class="stat-label">Actividades completadas</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="margin-top: 2rem;">
+        <div class="card-header">
+            <h2>Posiciones</h2>
+            <div style="font-size: 0.85rem; color: var(--text-light);">
+                🔄 Actualiza para ver cambios en tiempo real
             </div>
         </div>
 
-        <div class="ranking-table">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Posición</th>
-                        <th>Turista</th>
-                        <th>Actividades</th>
-                        <th>Puntaje Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($ranking as $posicion => $item)
-                        <tr class="@if ($posicion === 0) ranking-first @elseif ($posicion < 3) ranking-top @endif">
-                            <td class="posicion">
+        @if ($ranking->count() > 0)
+            <div class="ranking-table">
+                <div class="ranking-header">
+                    <div class="ranking-col ranking-pos">Pos</div>
+                    <div class="ranking-col ranking-name">Turista</div>
+                    <div class="ranking-col ranking-activities">Actividades</div>
+                    <div class="ranking-col ranking-score">Puntos</div>
+                </div>
+
+                @foreach ($ranking as $posicion => $item)
+                    <div class="ranking-row @if($posicion === 0) ranking-first @elseif($posicion < 3) ranking-top @endif">
+                        <div class="ranking-col ranking-pos">
+                            <div class="medal">
                                 @if ($posicion === 0)
                                     🥇
                                 @elseif ($posicion === 1)
@@ -43,71 +62,172 @@
                                 @else
                                     {{ $posicion + 1 }}
                                 @endif
-                            </td>
-                            <td>{{ $item->turista->name }}</td>
-                            <td>{{ $item->actividades_completadas }}</td>
-                            <td class="puntaje-destaca">{{ $item->puntaje_total }} pts</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="4" class="muted">Aún no hay participaciones registradas.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+                            </div>
+                        </div>
+                        <div class="ranking-col ranking-name">
+                            <div class="name">{{ $item->turista->name }}</div>
+                        </div>
+                        <div class="ranking-col ranking-activities">
+                            <span class="badge badge-primary">{{ $item->actividades_completadas }}</span>
+                        </div>
+                        <div class="ranking-col ranking-score">
+                            <span class="score">{{ $item->puntaje_total }} pts</span>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <div class="empty-state">
+                <div class="empty-icon">📊</div>
+                <h3>Sin participaciones aún</h3>
+                <p>El ranking se actualizará cuando los turistas comiencen a completar actividades.</p>
+            </div>
+        @endif
+    </div>
 
-        <div class="refresh-hint">
-            <p>💡 Actualiza esta página para ver el ranking actualizado en tiempo real</p>
-        </div>
+    <div style="text-align: center; margin-top: 2rem; color: var(--text-light); font-size: 0.9rem;">
+        <p>💡 Esta página se actualiza automáticamente cada 30 segundos</p>
     </div>
 
     <style>
-        .ranking-container { max-width: 900px; margin: 2rem auto; }
-        .subtitle { color: #666; font-size: 0.95rem; margin: 0.5rem 0 2rem; }
-        .ranking-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        .stat-item {
+            display: flex;
+            align-items: center;
             gap: 1rem;
-            margin: 2rem 0;
         }
-        .stat-card {
-            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
-            color: white;
-            padding: 1.5rem;
+
+        .stat-icon {
+            font-size: 2rem;
+        }
+
+        .stat-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .ranking-table {
+            border: 1px solid var(--border);
             border-radius: 8px;
-            text-align: center;
+            overflow: hidden;
         }
-        .stat-number { font-size: 2rem; font-weight: bold; }
-        .stat-label { font-size: 0.9rem; opacity: 0.9; }
-        .ranking-table { margin: 2rem 0; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td {
+
+        .ranking-header {
+            display: grid;
+            grid-template-columns: 60px 1fr 140px 120px;
+            gap: 1rem;
+            background: var(--bg);
             padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background: #f5f5f5;
             font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: var(--text-light);
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border);
         }
-        tr.ranking-first { background: rgba(255, 215, 0, 0.1); }
-        tr.ranking-top { background: rgba(192, 192, 192, 0.1); }
-        .posicion {
-            font-size: 1.3rem;
+
+        .ranking-row {
+            display: grid;
+            grid-template-columns: 60px 1fr 140px 120px;
+            gap: 1rem;
+            padding: 1rem;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .ranking-row:hover {
+            background: var(--bg);
+        }
+
+        .ranking-row.ranking-first {
+            background: rgba(16, 185, 129, 0.08);
+            border-bottom: 2px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .ranking-row.ranking-top {
+            background: rgba(139, 69, 19, 0.05);
+        }
+
+        .ranking-col {
+            display: flex;
+            align-items: center;
+        }
+
+        .ranking-pos {
+            justify-content: center;
+        }
+
+        .medal {
+            font-size: 1.5rem;
             text-align: center;
+            width: 100%;
         }
-        .puntaje-destaca {
-            font-weight: bold;
-            color: #8B4513;
-            font-size: 1.1rem;
+
+        .ranking-name {
+            font-weight: 600;
+            color: var(--text);
         }
-        .refresh-hint {
-            text-align: center;
-            padding: 1.5rem;
-            background: #f9f9f9;
-            border-radius: 8px;
-            margin-top: 2rem;
+
+        .ranking-activities {
+            justify-content: center;
+        }
+
+        .ranking-score {
+            justify-content: flex-end;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.05rem;
+        }
+
+        .score {
+            background: rgba(139, 69, 19, 0.1);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+        }
+
+        @media (max-width: 768px) {
+            .ranking-header,
+            .ranking-row {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            .ranking-col {
+                justify-content: space-between;
+            }
+
+            .ranking-col::before {
+                content: attr(data-label);
+                font-weight: 600;
+                font-size: 0.85rem;
+                text-transform: uppercase;
+                color: var(--text-light);
+                letter-spacing: 0.5px;
+            }
+
+            .ranking-pos::before { content: "Pos"; }
+            .ranking-name::before { content: "Turista"; }
+            .ranking-activities::before { content: "Actividades"; }
+            .ranking-score::before { content: "Puntos"; }
         }
     </style>
+
+    <script>
+        // Auto-reload cada 30 segundos
+        setTimeout(function() {
+            location.reload();
+        }, 30000);
+    </script>
 @endsection
