@@ -47,6 +47,15 @@ return [
             'report' => false,
         ],
 
+        'fotos' => [
+            'driver' => 'local',
+            'root' => storage_path('app/fotos'),
+            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage/fotos',
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

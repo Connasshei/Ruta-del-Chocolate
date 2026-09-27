@@ -95,6 +95,10 @@ class EventoService
     private function cerrarRecorrido(Evento $evento): void
     {
         $evento->eventoParadas()->update(['estado' => EventoParada::ESTADO_COMPLETADA]);
+
+        // Generar recuerdos para todos los turistas inscritos
+        $recuerdoService = app(RecuerdoService::class);
+        $recuerdoService->generarRecuerdoEvento($evento);
     }
 
     private function liberarInscripciones(Evento $evento): void

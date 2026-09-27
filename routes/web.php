@@ -1,12 +1,15 @@
 <?php
 
+use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\EventoPublicoController;
+use App\Http\Controllers\FotoController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InscripcionController;
+use App\Http\Controllers\RecuerdoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => redirect()->route('home'));
@@ -40,5 +43,37 @@ Route::middleware('auth')->group(function () {
         Route::delete('/eventos/{evento}', [EventoController::class, 'destroy'])->name('eventos.destroy');
         Route::patch('/inscripciones/{inscripcion}', [InscripcionController::class, 'actualizarEstado'])
             ->name('inscripciones.estado');
+
+        // Ranking en vivo durante evento
+        Route::get('/eventos/{evento}/ranking', [ActividadController::class, 'ranking'])
+            ->name('eventos.ranking');
+
+        // Galería de recuerdos generados
+        Route::get('/eventos/{evento}/recuerdos', [RecuerdoController::class, 'galeriaRecuerdos'])
+            ->name('eventos.recuerdos');
+    });
+
+    // Fotos (turistas inscritos)
+    Route::prefix('eventos/{evento}/fotos')->name('fotos.')->group(function () {
+        Route::get('/', [FotoController::class, 'galeria'])->name('galeria');
+        Route::post('/', [FotoController::class, 'subir'])->name('subir');
+        Route::delete('/{foto}', [FotoController::class, 'eliminar'])->name('eliminar');
+        Route::get('/{foto}/descargar', [FotoController::class, 'descargar'])->name('descargar');
+    });
+
+    // Actividades (turistas inscritos)
+    Route::prefix('eventos/{evento}/actividades')->name('actividades.')->group(function () {
+        Route::get('/{actividad}', [ActividadController::class, 'mostrar'])->name('mostrar');
+        Route::post('/{actividad}/participar', [ActividadController::class, 'registrarParticipacion'])
+            ->name('participar');
+        Route::get('/resumen', [ActividadController::class, 'resumenTurista'])->name('resumen');
+    });
+
+    // Recuerdos (turistas inscritos)
+    Route::prefix('eventos/{evento}/recuerdos')->name('recuerdos.')->group(function () {
+        Route::get('/mi-recuerdo', [RecuerdoController::class, 'miRecuerdo'])->name('mio');
+        Route::get('/{recuerdo}', [RecuerdoController::class, 'verRecuerdo'])->name('ver');
+        Route::get('/{recuerdo}/descargar', [RecuerdoController::class, 'descargarRecuerdo'])
+            ->name('descargar');
     });
 });
