@@ -14,15 +14,27 @@ class EventoParada extends Pivot
     public const ESTADO_PENDIENTE = 'pendiente';
     public const ESTADO_EN_CURSO = 'en_curso';
     public const ESTADO_COMPLETADA = 'completada';
+    public const ESTADO_SALTADA = 'saltada';
 
     protected $table = 'evento_parada';
 
-    protected $fillable = ['evento_id', 'parada_id', 'hora_estimada', 'orden', 'estado'];
+    protected $fillable = [
+        'evento_id',
+        'parada_id',
+        'hora_estimada',
+        'orden',
+        'duracion_minutos',
+        'actividades_ids',
+        'notas_guia',
+        'estado',
+    ];
 
     protected function casts(): array
     {
         return [
             'orden' => 'integer',
+            'duracion_minutos' => 'integer',
+            'actividades_ids' => 'array',
         ];
     }
 
